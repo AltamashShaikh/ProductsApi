@@ -10,22 +10,32 @@
 
 ## for simplicity assume the endpoint is http://localhost.productsapi/
 
-## To upload the image make a request to following endpoint
+## To upload the image make a POST request to following URL and parameter image should consist of the image
+
+	Request
+		
 	http://localhost.productsapi/Images/upload
 
-  The field name of the image should be "image".
+  	The field name of the image should be "image".
 	
-	On a successful request following output will be return {"status":"Success","message":"Image stored in redis successfully","image_id":"product_images_1481495072_2c012"}
+	On a successful request following output will be return 
+	
+	Response
+	
+	{"status":"Success","message":"Image stored in redis successfully","image_id":"product_images_1481495072_2c012"}
 
-## To store the products info you need to send the image_id received in response of above requuest make a post request to following url and send the data  as json mentioned below
+## To store the products info you need to send the image_id received in response of above request make a post request to following url and send the data  as json mentioned below
 
-		http://localhost.productsapi/Products/add/
+
+	Request
+	
+	http://localhost.productsapi/Products/add/
 		
-		{
+	{
 		"image_id":"product_images_1481495072_2c012",
 		"name":"Test",
 		"price":"400"
-		}
+	}
 
 	Response
 	
@@ -33,6 +43,8 @@
 
 
 ## To get the products info hit the following url as a GET request
+
+	Request
 
 	http://localhost.productsapi/Products/
 
