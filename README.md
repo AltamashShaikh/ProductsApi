@@ -52,7 +52,16 @@
 
 	{"data":[{"Product":{"product_id":"1","product_name":"testabc","image":"http:\/\/localhost.productsapi\/img\/product_images_1481479749_2c012_actual_image.jpeg","image_256":"http:\/\/localhost.productsapi\/img\/product_images_1481479749_2c012_256_pixel_image.jpeg","image_512":"http:\/\/localhost.productsapi\/img\/product_images_1481479749_2c012_512_pixel_image.jpeg","price":"400","creation_date":"2016-12-12","updation_date":"2016-12-12 03:17:27","is_deleted":"0"}},{"Product":{"product_id":"3","product_name":"Test","image":"http:\/\/localhost.productsapi\/img\/product_images_1481495072_2c012_actual_image.jpeg","image_256":"http:\/\/localhost.productsapi\/img\/product_images_1481495072_2c012_256_pixel_image.jpeg","image_512":"http:\/\/localhost.productsapi\/img\/product_images_1481495072_2c012_512_pixel_image.jpeg","price":"400","creation_date":"2016-12-12","updation_date":"2016-12-12 04:07:14","is_deleted":"0"}}],"status":"Success"}
 	
+## To delete the keys from redis which has been processed
+
+	To delete it manually run the following command
 	
+	cd $project
+	sudo app/Console/cake imageConsole delete_processed_images_from_redis
+
+	Alternatively we can set a cron by doing crontab -e and add the following line 
+	5  *    *    *    *  cd /var/www/html/ProductsApi/app && Console/cake imageConsole delete_processed_images_from_redis>>/var/www/html/ProductsApi/app/tmp/logs/delete_processed_images_from_redis.log
+
 ## Additional Apis
 
 	To update product details
