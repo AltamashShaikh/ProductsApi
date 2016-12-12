@@ -59,7 +59,7 @@
 	cd $project
 	sudo app/Console/cake imageConsole delete_processed_images_from_redis
 
-	Alternatively we can set a cron by doing crontab -e and add the following line 
+	Alternatively we can set a cron which runs every 5 minutes ,by doing crontab -e and add the following line 
 	5  *    *    *    *  cd /var/www/html/ProductsApi/app && Console/cake imageConsole delete_processed_images_from_redis>>/var/www/html/ProductsApi/app/tmp/logs/delete_processed_images_from_redis.log
 
 ## Additional Apis
