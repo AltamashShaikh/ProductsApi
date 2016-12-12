@@ -1,50 +1,109 @@
-# CakePHP
-
-[![Latest Stable Version](https://poser.pugx.org/cakephp/cakephp/v/stable.svg)](https://packagist.org/packages/cakephp/cakephp)
-[![License](https://poser.pugx.org/cakephp/cakephp/license.svg)](https://packagist.org/packages/cakephp/cakephp)
-[![Bake Status](https://secure.travis-ci.org/cakephp/cakephp.png?branch=master)](http://travis-ci.org/cakephp/cakephp)
-[![Code consistency](http://squizlabs.github.io/PHP_CodeSniffer/analysis/cakephp/cakephp/grade.svg)](http://squizlabs.github.io/PHP_CodeSniffer/analysis/cakephp/cakephp/)
-
-[![CakePHP](http://cakephp.org/img/cake-logo.png)](http://www.cakephp.org)
-
-CakePHP is a rapid development framework for PHP which uses commonly known design patterns like Active Record, Association Data Mapping, Front Controller and MVC.
-Our primary goal is to provide a structured framework that enables PHP users at all levels to rapidly develop robust web applications, without any loss to flexibility.
+## Checkout the Following Repo
+## Requiremnets
+	Mysql db (get the mysql file in app/db folder)
+	Redis
+	Apache mod rewrite should be enabled
 
 
-## Some Handy Links
+## Make a virtual host which points till the app/webroot directory
+	eg DocumentRoot "/var/wdocumenww/html/ProductsApi/app/webroot"
 
-[CakePHP](http://www.cakephp.org) - The rapid development PHP framework
+## for simplicity assume the endpoint is http://localhost.productsapi/
 
-[CookBook](http://book.cakephp.org) - THE CakePHP user documentation; start learning here!
+## To upload the image make a POST request to following URL and parameter image should consist of the image
 
-[API](http://api.cakephp.org) - A reference to CakePHP's classes
+	Request
+		
+	http://localhost.productsapi/Images/upload
 
-[Plugins](http://plugins.cakephp.org/) - A repository of extensions to the framework
+  	The field name of the image should be "image".
+	
+	On a successful request following output will be return 
+	
+	Response
+	
+	{"status":"Success","message":"Image stored in redis successfully","image_id":"product_images_1481495072_2c012"}
 
-[The Bakery](http://bakery.cakephp.org) - Tips, tutorials and articles
-
-[Community Center](http://community.cakephp.org) - A source for everything community related
-
-[Training](http://training.cakephp.org) - Join a live session and get skilled with the framework
-
-[CakeFest](http://cakefest.org) - Don't miss our annual CakePHP conference
-
-[Cake Software Foundation](http://cakefoundation.org) - Promoting development related to CakePHP
-
-
-## Get Support!
-
-[#cakephp](http://webchat.freenode.net/?channels=#cakephp) on irc.freenode.net - Come chat with us, we have cake
-
-[Google Group](https://groups.google.com/group/cake-php) - Community mailing list and forum
-
-[GitHub Issues](https://github.com/cakephp/cakephp/issues) - Got issues? Please tell us!
-
-[Roadmaps](https://github.com/cakephp/cakephp/wiki#roadmaps) - Want to contribute? Get involved!
+## To store the products info you need to send the image_id received in response of above request make a post request to following url and send the data  as json mentioned below
 
 
-## Contributing
+	Request
+	
+	http://localhost.productsapi/Products/add/
+		
+	{
+		"image_id":"product_images_1481495072_2c012",
+		"name":"Test",
+		"price":"400"
+	}
 
-[CONTRIBUTING.md](CONTRIBUTING.md) - Quick pointers for contributing to the CakePHP project
+	Response
+	
+	{"status":"Success","message":"Products Inserted Successfully","id":"3"}
 
-[CookBook "Contributing" Section (2.x)](http://book.cakephp.org/2.0/en/contributing.html) [(3.0)](http://book.cakephp.org/3.0/en/contributing.html) - Version-specific details about contributing to the project
+
+## To get the products info hit the following url as a GET request
+
+	Request
+
+	http://localhost.productsapi/Products/
+
+	Response
+
+	{"data":[{"Product":{"product_id":"1","product_name":"testabc","image":"http:\/\/localhost.productsapi\/img\/product_images_1481479749_2c012_actual_image.jpeg","image_256":"http:\/\/localhost.productsapi\/img\/product_images_1481479749_2c012_256_pixel_image.jpeg","image_512":"http:\/\/localhost.productsapi\/img\/product_images_1481479749_2c012_512_pixel_image.jpeg","price":"400","creation_date":"2016-12-12","updation_date":"2016-12-12 03:17:27","is_deleted":"0"}},{"Product":{"product_id":"3","product_name":"Test","image":"http:\/\/localhost.productsapi\/img\/product_images_1481495072_2c012_actual_image.jpeg","image_256":"http:\/\/localhost.productsapi\/img\/product_images_1481495072_2c012_256_pixel_image.jpeg","image_512":"http:\/\/localhost.productsapi\/img\/product_images_1481495072_2c012_512_pixel_image.jpeg","price":"400","creation_date":"2016-12-12","updation_date":"2016-12-12 04:07:14","is_deleted":"0"}}],"status":"Success"}
+	
+## To delete the keys from redis which has been processed
+
+	To delete it manually run the following command
+	
+	cd $project
+	sudo app/Console/cake imageConsole delete_processed_images_from_redis
+
+	Alternatively we can set a cron which runs every 5 minutes ,by doing crontab -e and add the following line 
+	5  *    *    *    *  cd /var/www/html/ProductsApi/app && Console/cake imageConsole delete_processed_images_from_redis>>/var/www/html/ProductsApi/app/tmp/logs/delete_processed_images_from_redis.log
+
+## Additional Apis
+
+	To update product details
+	
+	Request: Make the following post Request
+	
+	http://localhost.productsapi/Products/update/1
+	
+	{
+		"image_id":"product_images_1481495072_2c012",
+		"name":"Test123",
+		"price":"4000"
+		}
+		
+	Response
+
+	{"status":"Success","message":"Product Details Updated Successfully"}
+
+	To get product info of a particular id
+	
+	Request: Make a get Request to the following URL
+	
+	http://localhost.productsapi/Products/1
+
+	Response
+
+	{"data":[{"Product":{"product_id":"1","product_name":"testabc","image":"http:\/\/localhost.productsapi\/img\/product_images_1481479749_2c012_actual_image.jpeg","image_256":"http:\/\/localhost.productsapi\/img\/product_images_1481479749_2c012_256_pixel_image.jpeg","image_512":"http:\/\/localhost.productsapi\/img\/product_images_1481479749_2c012_512_pixel_image.jpeg","price":"400","creation_date":"2016-12-12","updation_date":"2016-12-12 03:17:27","is_deleted":"0"}}],"status":"Success"}
+
+	To delete a product
+
+	Request: Make a post Request to the folllowing url
+
+	http://localhost.productsapi/Products/delete/1
+
+	Response
+
+	{"status":"Success","message":"Products Deleted Successfully"}
+
+
+
+	
+		
+	
+
+
