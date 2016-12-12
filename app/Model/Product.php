@@ -49,9 +49,9 @@ class Product extends AppModel {
         $data = array(
             'product_name' => !empty($request_data->name) ? "'".$request_data->name."'" : NULL,
             'price' => !empty($request_data->price) ? $request_data->price : NULL,
-            'image' => isset($image_url_array['image']) ? $image_url_array['image'] : NULL,
-            'image_256' => isset($image_url_array['image_256']) ? $image_url_array['image_256'] : NULL,
-            'image_512' => isset($image_url_array['image_512']) ? $image_url_array['image_512'] : NULL,
+            'image' => isset($image_url_array['image']) ? "'".$image_url_array['image']."'" : NULL,
+            'image_256' => isset($image_url_array['image_256']) ? "'".$image_url_array['image_256']."'" : NULL,
+            'image_512' => isset($image_url_array['image_512']) ? "'".$image_url_array['image_512']."'" : NULL,
         );
         
         
